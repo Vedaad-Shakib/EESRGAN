@@ -38,7 +38,7 @@ class COWCGANTrainer:
         for _, test_data in enumerate(self.data_loader):
             #print(val_data)
             img_name = os.path.splitext(os.path.basename(test_data['LQ_path'][0]))[0]
-            img_dir = "/home/jakaria/Super_Resolution/Filter_Enhance_Detect/saved/"
+            img_dir = "/Users/vedaad/caliber/EESRGAN/saved/"
 
             self.model.feed_data(test_data)
             self.model.test()

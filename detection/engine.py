@@ -145,7 +145,9 @@ def evaluate(model_G, model_FRCNN, data_loader, device):
         image['image_lq'] = image['image_lq'].to(device)
         targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
 
-        torch.cuda.synchronize()
+        if device != cpu_device:
+            print(f"device: {type(device)}")
+            torch.cuda.synchronize()
         model_time = time.time()
         _, image, _, _ = model_G(image['image_lq'])
         img_count = image.size()[0]
@@ -190,7 +192,8 @@ def evaluate_base(model, data_loader, device):
         image = list(img.to(device) for img in image)
         targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
 
-        torch.cuda.synchronize()
+        if device != cpu_device:
+            torch.cuda.synchronize()
         model_time = time.time()
         outputs = model(image)
         #print(outputs)
