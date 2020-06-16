@@ -309,7 +309,7 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
         self.netG.eval()
         self.netFRCNN.eval()
         self.targets = valid_data_loader
-        if testResult == False:
+        if testResult == False: # no test results
             with torch.no_grad():
                 (
                     self.fake_H,
@@ -318,10 +318,9 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
                     self.x_lap,
                 ) = self.netG(self.var_L)
                 self.x_lap_HR = kornia.laplacian(self.var_H, 3)
-        if train == True:
+        if train == True: # this trains it
             evaluate(self.netG, self.netFRCNN, self.targets, self.device)
-        if testResult == True:
-            print(f"self.device: {self.device}")
+        if testResult == True: # outputs train results
             evaluate(self.netG, self.netFRCNN, self.targets, self.device)
             evaluate_save(
                 self.netG, self.netFRCNN, self.targets, self.device, self.config

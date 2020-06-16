@@ -76,9 +76,11 @@ Draw boxes on the test images
 
 def draw_detection_boxes(new_class_conf_box, config, file_name, image):
     source_image_path = os.path.join(
-        config["path"]["output_images"], file_name, file_name + "_112000_final_SR.png"
+        config["path"]["output_images"], file_name + ".jpg"
     )
-    dest_image_path = os.path.join(config["path"]["Test_Result_SR"], file_name + ".png")
+    dest_image_path = os.path.join(config["path"]["Test_Result_SR"], file_name + ".jpg")
+    print(f"source image path: {source_image_path}")
+    print(f"dest image path: {dest_image_path}")
     image = cv2.imread(source_image_path, 1)
     # print(new_class_conf_box)
     # print(len(new_class_conf_box))
@@ -97,6 +99,7 @@ def draw_detection_boxes(new_class_conf_box, config, file_name, image):
             cv2.LINE_AA,
         )
 
+    print(dest_image_path)
     cv2.imwrite(dest_image_path, image)
 
 
@@ -115,7 +118,7 @@ def get_prediction(outputs, file_path, config, file_name, image, threshold=0.5):
         for i in list(outputs[0]["boxes"].detach().cpu().numpy())
     ]  # Bounding boxes
     pred_score = list(outputs[0]["scores"].detach().cpu().numpy())
-    # print(pred_score)
+    print(pred_score)
     for i in range(len(text_boxes)):
         new_class_conf_box.append(
             [
@@ -180,7 +183,6 @@ def evaluate(model_G, model_FRCNN, data_loader, device):
         targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
 
         if device != cpu_device:
-            print(f"device: {type(device)}")
             torch.cuda.synchronize()
         model_time = time.time()
         _, image, _, _ = model_G(image["image_lq"])

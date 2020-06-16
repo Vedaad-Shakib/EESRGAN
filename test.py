@@ -11,11 +11,12 @@ python test.py -c config_GAN.json
 
 def main(config):
     data_loader = module_data.COWCGANFrcnnDataLoader(
-        "/Users/vedaad/caliber/EESRGAN/data/DetectionPatches_256x256/Potsdam_ISPRS/HR/x4/valid_img/",
-        "/Users/vedaad/caliber/EESRGAN/data/DetectionPatches_256x256/Potsdam_ISPRS/LR/x4/valid_img/",
+        "/Users/vedaad/caliber/EESRGAN/test_data/HR/",
+        "/Users/vedaad/caliber/EESRGAN/test_data/LR/",
         1,
         training=False,
     )
+    print(len(data_loader))
     tester = COWCGANFrcnnTrainer(config=config, data_loader=data_loader)
     tester.test()
 

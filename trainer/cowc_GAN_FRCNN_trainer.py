@@ -35,20 +35,21 @@ class COWCGANFrcnnTrainer:
         self.config = config
         self.data_loader = data_loader
 
-        self.valid_data_loader = valid_data_loader
-        self.do_validation = self.valid_data_loader is not None
+        # self.valid_data_loader = valid_data_loader
+        # self.do_validation = self.valid_data_loader is not None
         n_gpu = torch.cuda.device_count()
         self.device = torch.device("cuda:0" if n_gpu > 0 else "cpu")
-        self.train_size = int(
-            math.ceil(
-                self.data_loader.length
-                / int(config["data_loader"]["args"]["batch_size"])
-            )
-        )
-        self.total_iters = int(config["train"]["niter"])
-        self.total_epochs = int(math.ceil(self.total_iters / self.train_size))
-        print(self.total_epochs)
+        # self.train_size = int(
+        #     math.ceil(
+        #         self.data_loader.length
+        #         / int(config["data_loader"]["args"]["batch_size"])
+        #     )
+        # )
+        # self.total_iters = int(config["train"]["niter"])
+        # self.total_epochs = int(math.ceil(self.total_iters / self.train_size))
         self.model = ESRGAN_EESN.ESRGAN_EESN_FRCNN_Model(config, self.device)
+
+        # note: commented out above lines because we're using pretrained model and doing inference here
 
     def test(self):
         self.model.test(self.data_loader, train=False, testResult=True)

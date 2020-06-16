@@ -1,19 +1,14 @@
-import logging
 import argparse
 import collections
-import torch
-import os
+import logging
+
 import numpy as np
+import torch
+
 import data_loader.data_loaders as module_data
-import model.loss as module_loss
-import model.metric as module_metric
-import model.model as module_arch
 from parse_config import ConfigParser
-from trainer import COWCTrainer
-from trainer import COWCGANTrainer
-from trainer import COWCFRCNNTrainer
 from trainer import COWCGANFrcnnTrainer
-from utils import setup_logger, dict2str
+from utils import setup_logger
 
 """
 python train.py -c config_GAN.json
