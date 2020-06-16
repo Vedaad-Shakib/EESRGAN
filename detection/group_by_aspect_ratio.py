@@ -26,6 +26,7 @@ class GroupedBatchSampler(BatchSampler):
             0, i.e. they must be in the range [0, num_groups).
         batch_size (int): Size of mini-batch.
     """
+
     def __init__(self, sampler, group_ids, batch_size):
         if not isinstance(sampler, Sampler):
             raise ValueError(
@@ -60,11 +61,13 @@ class GroupedBatchSampler(BatchSampler):
         if num_remaining > 0:
             # for the remaining batches, take first the buffers with largest number
             # of elements
-            for group_id, _ in sorted(buffer_per_group.items(),
-                                      key=lambda x: len(x[1]), reverse=True):
+            for group_id, _ in sorted(
+                buffer_per_group.items(), key=lambda x: len(x[1]), reverse=True
+            ):
                 remaining = self.batch_size - len(buffer_per_group[group_id])
                 buffer_per_group[group_id].extend(
-                    samples_per_group[group_id][:remaining])
+                    samples_per_group[group_id][:remaining]
+                )
                 assert len(buffer_per_group[group_id]) == self.batch_size
                 yield buffer_per_group[group_id]
                 num_remaining -= 1
@@ -77,10 +80,12 @@ class GroupedBatchSampler(BatchSampler):
 
 
 def _compute_aspect_ratios_slow(dataset, indices=None):
-    print("Your dataset doesn't support the fast path for "
-          "computing the aspect ratios, so will iterate over "
-          "the full dataset and load every image instead. "
-          "This might take some time...")
+    print(
+        "Your dataset doesn't support the fast path for "
+        "computing the aspect ratios, so will iterate over "
+        "the full dataset and load every image instead. "
+        "This might take some time..."
+    )
     if indices is None:
         indices = range(len(dataset))
 
@@ -96,9 +101,12 @@ def _compute_aspect_ratios_slow(dataset, indices=None):
 
     sampler = SubsetSampler(indices)
     data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=1, sampler=sampler,
+        dataset,
+        batch_size=1,
+        sampler=sampler,
         num_workers=14,  # you might want to increase it for faster processing
-        collate_fn=lambda x: x[0])
+        collate_fn=lambda x: x[0],
+    )
     aspect_ratios = []
     with tqdm(total=len(dataset)) as pbar:
         for i, (img, _) in enumerate(data_loader):
