@@ -11,7 +11,7 @@ python test.py -c config_GAN.json
 
 def main(config):
     data_loader = module_data.COWCGANFrcnnDataLoader(
-        "/Users/vedaad/caliber/EESRGAN/test_data/HR/",
+        "/Users/vedaad/caliber/EESRGAN/test_data/LR/",
         "/Users/vedaad/caliber/EESRGAN/test_data/LR/",
         1,
         training=False,

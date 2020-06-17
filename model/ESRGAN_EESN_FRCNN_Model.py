@@ -305,11 +305,11 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
         self.log_dict["D_fake"] = torch.mean(pred_d_fake.detach())
         self.log_dict["FRCNN_loss"] = loss_value
 
-    def test(self, valid_data_loader, train=True, testResult=False):
+    def test(self, valid_data_loader, train=True, testResult=False, inference=False):
         self.netG.eval()
         self.netFRCNN.eval()
         self.targets = valid_data_loader
-        if testResult == False: # no test results
+        if testResult == False:
             with torch.no_grad():
                 (
                     self.fake_H,
@@ -322,9 +322,11 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
             evaluate(self.netG, self.netFRCNN, self.targets, self.device)
         if testResult == True: # outputs train results
             evaluate(self.netG, self.netFRCNN, self.targets, self.device)
-            evaluate_save(
-                self.netG, self.netFRCNN, self.targets, self.device, self.config
+            output = evaluate_save(
+                self.netG, self.netFRCNN, self.targets, self.device, self.config, inference=inference
             )
+            if inference:
+                return output
         self.netG.train()
         self.netFRCNN.train()
 

@@ -64,7 +64,6 @@ class ConfigParser:
             resume = None
             cfg_fname = Path(args.config)
 
-        print(cfg_fname)
         config = read_json(cfg_fname)
         if args.config and resume:
             # update new config for fine-tuning
@@ -113,6 +112,9 @@ class ConfigParser:
     def __getitem__(self, name):
         """Access items like ordinary dict."""
         return self.config[name]
+
+    def __setitem__(self, index, value):
+        self.config[index] = value
 
     def get_logger(self, name, verbosity=2):
         msg_verbosity = "verbosity option {} is invalid. Valid options are {}.".format(

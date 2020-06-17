@@ -163,6 +163,7 @@ def convert_to_coco_api(ds):
         bboxes = bboxes.tolist()
         labels = targets["labels"].tolist()
         areas = targets["area"].tolist()
+        print(f"areas: {areas}")
         iscrowd = targets["iscrowd"].tolist()
         if "masks" in targets:
             masks = targets["masks"]

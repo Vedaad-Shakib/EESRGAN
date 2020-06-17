@@ -138,7 +138,8 @@ def get_prediction(outputs, file_path, config, file_name, image, threshold=0.5):
 
 
 @torch.no_grad()
-def evaluate_save(model_G, model_FRCNN, data_loader, device, config):
+def evaluate_save(model_G, model_FRCNN, data_loader, device, config, inference=False):
+    if inference: assert len(data_loader) == 1
     i = 0
     print("Detection started........")
     for image, targets in data_loader:
@@ -148,6 +149,9 @@ def evaluate_save(model_G, model_FRCNN, data_loader, device, config):
         img_count = img.size()[0]
         images = [img[i] for i in range(img_count)]
         outputs = model_FRCNN(images)
+        if inference:
+            return outputs
+
         file_name = os.path.splitext(os.path.basename(image["LQ_path"][0]))[0]
         file_path = os.path.join(config["path"]["Test_Result_SR"], file_name + ".txt")
         i = i + 1

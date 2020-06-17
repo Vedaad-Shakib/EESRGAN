@@ -209,6 +209,8 @@ class COWCGANFrcnnDataLoader(BaseDataLoader):
         validation_split=0.0,
         num_workers=1,
         training=True,
+            inference=False,
+            inference_request=None,
     ):
         # data transformation
         # According to this link: https://discuss.pytorch.org/t/normalization-of-input-image/34814/8
@@ -247,11 +249,11 @@ class COWCGANFrcnnDataLoader(BaseDataLoader):
 
         if training == True:
             self.dataset = COWCGANFrcnnDataset(
-                self.data_dir_gt, self.data_dir_lq, transform=data_transforms_train
+                self.data_dir_gt, self.data_dir_lq, transform=data_transforms_train, inference=inference, inference_request=inference_request
             )
         else:
             self.dataset = COWCGANFrcnnDataset(
-                self.data_dir_gt, self.data_dir_lq, transform=data_transforms_test
+                self.data_dir_gt, self.data_dir_lq, transform=data_transforms_test, inference=inference, inference_request=inference_request
             )
         self.length = len(self.dataset)
         super().__init__(

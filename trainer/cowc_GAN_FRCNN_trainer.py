@@ -51,8 +51,8 @@ class COWCGANFrcnnTrainer:
 
         # note: commented out above lines because we're using pretrained model and doing inference here
 
-    def test(self):
-        self.model.test(self.data_loader, train=False, testResult=True)
+    def test(self, inference=False):
+        self.model.test(self.data_loader, train=False, testResult=True, inference=inference)
 
     def train(self):
         """

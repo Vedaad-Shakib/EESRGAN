@@ -22,6 +22,8 @@ class COWCGANFrcnnDataset(Dataset):
         image_height=256,
         image_width=256,
         transform=None,
+        inference=False,
+        inference_request=None
     ):
         self.data_dir_gt = data_dir_gt
         self.data_dir_lq = data_dir_lq
@@ -30,11 +32,46 @@ class COWCGANFrcnnDataset(Dataset):
         self.image_height = image_height
         self.image_width = image_width
         # sort all images for indexing, filter out check.jpgs
-        self.imgs_gt = list(sorted(glob.glob(self.data_dir_gt + "*.jpg")))
-        self.imgs_lq = list(sorted(glob.glob(self.data_dir_lq + "*.jpg")))
-        self.annotation = list(sorted(glob.glob(self.data_dir_lq + "*.txt")))
+
+        # if doing inference, we just take one image
+        self.inference = inference
+        if not inference:
+            self.imgs_gt = list(sorted(glob.glob(self.data_dir_gt + "*.jpg")))
+            self.imgs_lq = list(sorted(glob.glob(self.data_dir_lq + "*.jpg")))
+            self.annotation = list(sorted(glob.glob(self.data_dir_lq + "*.txt")))
+        else:
+            self.imgs_lq = [""] # this is a hack to make the __len__ function work
+            self.inference_request = inference_request
+
+    def getitem_inference(self, idx):
+        # expects a cv2 object
+        img_gt = img_lq = cv2.cvtColor(self.inference_request, cv2.COLOR_BGR2RGB)
+
+        # create dictionary to access the values
+        target = {}
+        target["object"] = 0
+        target["image_lq"] = img_lq
+        target["image"] = img_gt
+        target["bboxes"] = [[0, 0, 1, 1]]
+        target["labels"] = [1]
+        target["label_car_type"] = [0]
+        target["image_id"] = idx
+        target["LQ_path"] = None
+        target["area"] = [0]
+        target["iscrowd"] = [0]
+
+        if self.transform is not None:
+            target = self.transform(**target)
+
+        image, target = self.convert_to_tensor(**target)
+        return image, target
 
     def __getitem__(self, idx):
+        if self.inference:
+            # this is a function that returns the image in the format that is required but not the target
+            # this function also does not return any info about high quality image
+            return self.getitem_inference(idx)
+
         # get the paths
         img_path_gt = os.path.join(self.data_dir_gt, self.imgs_gt[idx])
         img_path_lq = os.path.join(self.data_dir_lq, self.imgs_lq[idx])
@@ -43,6 +80,7 @@ class COWCGANFrcnnDataset(Dataset):
         img_lq = cv2.imread(img_path_lq, 1)  # read color image height*width*channel=3
         img_gt = cv2.cvtColor(img_gt, cv2.COLOR_BGR2RGB)
         img_lq = cv2.cvtColor(img_lq, cv2.COLOR_BGR2RGB)
+
         # get the bounding box
         boxes = list()
         label_car_type = list()
@@ -102,8 +140,10 @@ class COWCGANFrcnnDataset(Dataset):
             target["label_car_type"] = label_car_type
             target["image_id"] = idx
             target["LQ_path"] = img_path_lq
+            print(f"area here: {area}")
             target["area"] = area
             target["iscrowd"] = iscrowd
+
 
         if self.transform is None:
             # convert to tensor
@@ -112,7 +152,6 @@ class COWCGANFrcnnDataset(Dataset):
             # transform
         else:
             transformed = self.transform(**target)
-            # print(transformed['image'], transformed['bboxes'], transformed['labels'], transformed['idx'])
             image, target = self.convert_to_tensor(**transformed)
             return image, target
 
