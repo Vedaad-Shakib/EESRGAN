@@ -13,8 +13,9 @@ from utils.util import read_json
 
 logger = logging.getLogger(__name__)
 
-config_name = "config_GAN.json"
-config_obj = read_json(config_name)
+curr_dir = os.path.dirname(os.path.realpath(__file__))
+config_path = os.path.join(curr_dir, "config_GAN.json")
+config_obj = read_json(config_path)
 config = ConfigParser(config_obj, None, {})
 pretrain_model_G_name = "170000_G.pth"
 pretrain_model_D_name = "170000_D.pth"
@@ -60,7 +61,6 @@ def input_fn(request_body, content_type="application/json"):
 
 def predict_fn(data_loader, model):
     # modify it so it just returns the bounding boxes
-    # modify it so it does not perform validation with the .txt shit
     result = model.test(data_loader, train=False, testResult=True, inference=True)
     return result
 
