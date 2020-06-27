@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import urllib
@@ -44,7 +45,9 @@ def input_fn(request_body, content_type="application/json"):
     if content_type != "application/json":
         raise Exception(f'Requested unsupported ContentType: {content_type}')
 
-    req = urllib.request.urlopen(request_body)
+    input_data = json.loads(request_body)
+    url = input_data['url']
+    req = urllib.request.urlopen(url)
     arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
     img = cv2.imdecode(arr, 1)
 
@@ -66,4 +69,8 @@ def predict_fn(data_loader, model):
 
 
 def output_fn(prediction, content_type="application/json"):
-    return prediction
+    prediction = prediction[0]
+    boxes = prediction["boxes"].numpy().tolist()
+    res = json.dumps({"boxes": boxes})
+
+    return res
