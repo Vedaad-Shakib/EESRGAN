@@ -75,8 +75,8 @@ class BaseModel:
         n = sum(map(lambda x: x.numel(), network.parameters()))
         return s, n
 
-    def save_network(self, network, network_label, iter_label):
-        save_filename = "{}_{}.pth".format(iter_label, network_label)
+    def save_network(self, network, network_label, iter_label="170000"):
+        save_filename = "170000_{}.pth".format(network_label)
         save_path = os.path.join(self.config["path"]["models"], save_filename)
         if isinstance(network, nn.DataParallel) or isinstance(
             network, DistributedDataParallel

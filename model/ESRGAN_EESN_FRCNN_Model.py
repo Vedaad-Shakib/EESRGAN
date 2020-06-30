@@ -438,7 +438,7 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
             )
 
     def save(self, iter_step):
-        self.save_network(self.netG, "G", iter_step)
-        self.save_network(self.netD, "D", iter_step)
-        self.save_network(self.netFRCNN, "FRCNN", iter_step)
+        self.save_network(self.netG, "G")
+        self.save_network(self.netD, "D")
+        self.save_network(self.netFRCNN, "FRCNN")
         # self.save_network(self.netG.module.netE, 'E', iter_step)

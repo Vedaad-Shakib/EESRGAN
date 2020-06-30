@@ -140,7 +140,6 @@ class COWCGANFrcnnDataset(Dataset):
             target["label_car_type"] = label_car_type
             target["image_id"] = idx
             target["LQ_path"] = img_path_lq
-            print(f"area here: {area}")
             target["area"] = area
             target["iscrowd"] = iscrowd
 
