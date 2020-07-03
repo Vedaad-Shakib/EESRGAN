@@ -4,7 +4,7 @@
     "model": "srgan",
     "distortion": "sr",
     "scale": 4,
-    "use_tb_logger": true,
+    "use_tb_logger": false,
 
     "network_G": {
         "which_model_G": "RRDBNet",

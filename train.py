@@ -92,4 +92,7 @@ if __name__ == "__main__":
     # set num gpus
     config["n_gpu"] = os.environ.get("SM_NUM_GPUS", torch.cuda.device_count())
 
+    # set log output location
+    config["path"]["log"] = os.environ["SM_OUTPUT_DATA_DIR"]
+
     main(config)
