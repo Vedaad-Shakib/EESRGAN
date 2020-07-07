@@ -45,6 +45,8 @@ def main(config):
     )
     logger = logging.getLogger("base")
 
+    logger.info(f"Train channels: {train_gt_dir}, {train_lq_dir}")
+
     # setup data_loader instances
     data_loader = config.init_obj("data_loader", module_data)
     # change later this valid_data_loader using init_obj
@@ -59,6 +61,8 @@ def main(config):
         1,
         training=False,
     )
+
+    logger.info(f"Val channels: {val_gt_dir}, {val_lq_dir}")
 
     trainer = COWCGANFrcnnTrainer(
         config=config, data_loader=data_loader, valid_data_loader=valid_data_loader
