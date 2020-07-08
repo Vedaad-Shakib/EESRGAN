@@ -7,6 +7,7 @@ from datetime import datetime
 from logger import setup_logging
 from utils import read_json, write_json
 
+logger = logging.getLogger("base")
 
 class ConfigParser:
     def __init__(self, config, resume=None, modification=None, run_id=None):
@@ -90,6 +91,9 @@ class ConfigParser:
             [k not in module_args for k in kwargs]
         ), "Overwriting kwargs given in config file is not allowed"
         module_args.update(kwargs)
+        logger.info(f"in init_obj now")
+        logger.info(f"args: {args}")
+        logger.info(f"module_args: {module_args}")
         return getattr(module, module_name)(*args, **module_args)
 
     def init_ftn(self, name, module, *args, **kwargs):

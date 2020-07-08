@@ -6,6 +6,9 @@ from scripts_for_datasets import (
     COWCFRCNNDataset,
     COWCGANFrcnnDataset,
 )
+import logging
+
+logger = logging.getLogger("base")
 
 from albumentations import (
     HorizontalFlip,
@@ -256,6 +259,11 @@ class COWCGANFrcnnDataLoader(BaseDataLoader):
                 self.data_dir_gt, self.data_dir_lq, transform=data_transforms_test, inference=inference, inference_request=inference_request
             )
         self.length = len(self.dataset)
+
+        logger.info("in data loaders now")
+        logger.info(f"dataset length: {self.length}")
+        logger.info(f"data_dir_gt: {self.data_dir_gt}")
+        logger.info(f"data_dir_lq: {self.data_dir_lq}")
         super().__init__(
             self.dataset,
             batch_size,
