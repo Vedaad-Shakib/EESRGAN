@@ -97,6 +97,8 @@ if __name__ == "__main__":
     )
     logger = logging.getLogger("base")
 
+    logger.info(f"Running for {n_iters} iterations")
+
     # log number of training images
     n_training_images_lq = len(glob.glob(os.path.join(train_lq_dir, "*.jpg")))
     logger.info(f"Train channels: {train_gt_dir}, {train_lq_dir}")
