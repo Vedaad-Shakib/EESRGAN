@@ -30,8 +30,8 @@ def main(config, logger):
     data_loader = config.init_obj("data_loader", module_data)
     # change later this valid_data_loader using init_obj
 
-    val_gt_dir = os.path.join(os.environ["SM_CHANNEL_VAL"], "HR")
-    val_lq_dir = os.path.join(os.environ["SM_CHANNEL_VAL"], "LR")
+    val_gt_dir = os.path.join(os.environ["SM_CHANNEL_VAL"], "HR/")
+    val_lq_dir = os.path.join(os.environ["SM_CHANNEL_VAL"], "LR/")
     valid_data_loader = module_data.COWCGANFrcnnDataLoader(
         val_gt_dir,
         val_lq_dir,
@@ -58,8 +58,8 @@ if __name__ == "__main__":
     config = ConfigParser(config_obj, None, {})
 
     # set train data location config vars
-    train_gt_dir = os.path.join(os.environ["SM_CHANNEL_TRAIN"], "HR")
-    train_lq_dir = os.path.join(os.environ["SM_CHANNEL_TRAIN"], "LR")
+    train_gt_dir = os.path.join(os.environ["SM_CHANNEL_TRAIN"], "HR/")
+    train_lq_dir = os.path.join(os.environ["SM_CHANNEL_TRAIN"], "LR/")
     config["data_loader"]["args"]["data_dir_GT"] = train_gt_dir
     config["data_loader"]["args"]["data_dir_LQ"] = train_lq_dir
 
