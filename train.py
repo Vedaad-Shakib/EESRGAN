@@ -26,10 +26,6 @@ np.random.seed(SEED)
 
 def main(config, logger):
     # logger = config.get_logger('train')
-    # config loggers. Before it, the log will not work
-
-    logger.info(f"Train channels: {train_gt_dir}, {train_lq_dir}")
-
     # setup data_loader instances
     data_loader = config.init_obj("data_loader", module_data)
     # change later this valid_data_loader using init_obj
@@ -103,6 +99,7 @@ if __name__ == "__main__":
 
     # log number of training images
     n_training_images_lq = len(glob.glob(os.path.join(train_lq_dir, "*.jpg")))
+    logger.info(f"Train channels: {train_gt_dir}, {train_lq_dir}")
     logger.info(f"n_training_images_gt: {n_training_images}")
     logger.info(f"n_training_images_lq: {n_training_images_lq}")
 

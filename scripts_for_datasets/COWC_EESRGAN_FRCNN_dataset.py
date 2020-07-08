@@ -1,18 +1,17 @@
 from __future__ import print_function, division
-import os
-import torch
-import numpy as np
-import glob
-import cv2
-import matplotlib.pyplot as plt
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms, utils
 
-# Ignore warnings
+import glob
+import logging
+import os
 import warnings
 
-warnings.filterwarnings("ignore")
+import cv2
+import numpy as np
+import torch
+from torch.utils.data import Dataset
 
+warnings.filterwarnings("ignore")
+logger = logging.getLogger("base")
 
 class COWCGANFrcnnDataset(Dataset):
     def __init__(
@@ -36,9 +35,16 @@ class COWCGANFrcnnDataset(Dataset):
         # if doing inference, we just take one image
         self.inference = inference
         if not inference:
+            logger.info(f"in cowcganfrcnndataset now")
+            logger.info(f"data_dir_gt: {data_dir_gt}")
+            logger.info(f"data_dir_lq: {data_dir_lq}")
             self.imgs_gt = list(sorted(glob.glob(self.data_dir_gt + "*.jpg")))
             self.imgs_lq = list(sorted(glob.glob(self.data_dir_lq + "*.jpg")))
             self.annotation = list(sorted(glob.glob(self.data_dir_lq + "*.txt")))
+
+            logger.info(f"len(imgs_gt): {len(self.imgs_gt)}")
+            logger.info(f"len(imgs_lq): {len(self.imgs_lq)}")
+            logger.info(f"len(annotation): {len(self.annotation)}")
         else:
             self.imgs_lq = [""] # this is a hack to make the __len__ function work
             self.inference_request = inference_request
