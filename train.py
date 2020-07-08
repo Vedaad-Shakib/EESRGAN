@@ -24,26 +24,9 @@ torch.backends.cudnn.benchmark = False
 np.random.seed(SEED)
 
 
-def main(config):
+def main(config, logger):
     # logger = config.get_logger('train')
     # config loggers. Before it, the log will not work
-    setup_logger(
-        "base",
-        config["path"]["log"],
-        "train_" + config["name"],
-        level=logging.INFO,
-        screen=True,
-        tofile=True,
-    )
-    setup_logger(
-        "val",
-        config["path"]["log"],
-        "val_" + config["name"],
-        level=logging.INFO,
-        screen=True,
-        tofile=True,
-    )
-    logger = logging.getLogger("base")
 
     logger.info(f"Train channels: {train_gt_dir}, {train_lq_dir}")
 
@@ -99,4 +82,28 @@ if __name__ == "__main__":
     # set log output location
     config["path"]["log"] = os.environ["SM_OUTPUT_DATA_DIR"]
 
-    main(config)
+    # config logger
+    setup_logger(
+        "base",
+        config["path"]["log"],
+        "train_" + config["name"],
+        level=logging.INFO,
+        screen=True,
+        tofile=True,
+    )
+    setup_logger(
+        "val",
+        config["path"]["log"],
+        "val_" + config["name"],
+        level=logging.INFO,
+        screen=True,
+        tofile=True,
+    )
+    logger = logging.getLogger("base")
+
+    # log number of training images
+    n_training_images_lq = len(glob.glob(os.path.join(train_lq_dir, "*.jpg")))
+    logger.info(f"n_training_images_gt: {n_training_images}")
+    logger.info(f"n_training_images_lq: {n_training_images_lq}")
+
+    main(config, logger)
