@@ -362,22 +362,29 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
             "Network G structure: {}, with parameters: {:,d}".format(net_struc_str, n)
         )
         logger.info(s)
+        logger.info(f"Reached A")
 
         # Discriminator
+        logger.info("Reached B")
         s, n = self.get_network_description(self.netD)
+        logger.info("Reached C")
         if isinstance(self.netD, nn.DataParallel) or isinstance(
             self.netD, DistributedDataParallel
         ):
+            logger.info("Reached C1")
             net_struc_str = "{} - {}".format(
                 self.netD.__class__.__name__, self.netD.module.__class__.__name__
             )
         else:
+            logger.info("Reached C2")
             net_struc_str = "{}".format(self.netD.__class__.__name__)
 
+        logger.info("Reached D")
         logger.info(
             "Network D structure: {}, with parameters: {:,d}".format(net_struc_str, n)
         )
         logger.info(s)
+        logger.info("Reached E")
 
         if self.cri_fea:  # F, Perceptual Network
             s, n = self.get_network_description(self.netF)
@@ -418,7 +425,9 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
         logger.info(s)
 
     def load(self):
+        logger.info(f"Entered load")
         load_path_G = self.config["path"]["pretrain_model_G"]
+        logger.info(f"load_path_G: {load_path_G}")
         if load_path_G:
             logger.info("Loading model for G [{:s}] ...".format(load_path_G))
             self.load_network(
