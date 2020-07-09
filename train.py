@@ -46,6 +46,7 @@ def main(config, logger):
     trainer = COWCGANFrcnnTrainer(
         config=config, data_loader=data_loader, valid_data_loader=valid_data_loader
     )
+    logger.info(f"In train.py. Initialized trainer and about to called trainer.train()")
     trainer.train()
 
 

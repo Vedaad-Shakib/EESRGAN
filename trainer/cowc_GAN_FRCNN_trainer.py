@@ -32,6 +32,7 @@ class COWCGANFrcnnTrainer:
     """
 
     def __init__(self, config, data_loader, valid_data_loader=None):
+        logger.info("Called init of COWCGANFrcnnTrainer")
         self.config = config
         self.data_loader = data_loader
 
@@ -51,6 +52,8 @@ class COWCGANFrcnnTrainer:
             )
             self.total_iters = int(config["train"]["niter"])
             self.total_epochs = int(math.ceil(self.total_iters / self.train_size))
+            logger.info(f"In __init__ of trainer; total_epochs: {self.total_epochs}")
+        logger.info(f"Finished init of COWCGANFrcnnTrainer")
 
         # note: commented out above lines because we're using pretrained model and doing inference here
 
@@ -70,6 +73,7 @@ class COWCGANFrcnnTrainer:
 
         #image size: torch.Size([10, 3, 256, 256]) if batch_size = 10
         """
+        logger.info(f"Called train in cowc_GAN_FRCNN_trainer")
         logger.info(
             "Number of train images: {:,d}, iters: {:,d}".format(
                 self.data_loader.length, self.train_size
