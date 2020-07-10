@@ -106,8 +106,12 @@ if __name__ == "__main__":
     logger.info(f"n_training_images_gt: {n_training_images}")
     logger.info(f"n_training_images_lq: {n_training_images_lq}")
 
-    config["path"]["pretrain_model_G"] = os.path.join(os.environ["SM_CHANNEL_MODELS"], "170000_G.pth")
-    config["path"]["pretrain_model_D"] = os.path.join(os.environ["SM_CHANNEL_MODELS"], "170000_D.pth")
-    config["path"]["pretrain_model_FRCNN"] = os.path.join(os.environ["SM_CHANNEL_MODELS"], "170000_FRCNN.pth")
+    # config["path"]["pretrain_model_G"] = os.path.join(os.environ["SM_CHANNEL_MODELS"], "170000_G.pth")
+    # config["path"]["pretrain_model_D"] = os.path.join(os.environ["SM_CHANNEL_MODELS"], "170000_D.pth")
+    # config["path"]["pretrain_model_FRCNN"] = os.path.join(os.environ["SM_CHANNEL_MODELS"], "170000_FRCNN.pth")
+
+    config["path"]["pretrain_model_G"] = ""
+    config["path"]["pretrain_model_D"] = ""
+    config["path"]["pretrain_model_FRCNN"] = ""
 
     main(config, logger)
