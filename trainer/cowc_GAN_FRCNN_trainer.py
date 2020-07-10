@@ -114,8 +114,6 @@ class COWCGANFrcnnTrainer:
                     logger.info(f"Hit {self.total_iters} iterations. Stopping")
                     break
 
-                logger.info(f"Starting iteration {current_step}")
-
                 #### update learning rate
                 self.model.update_learning_rate(
                     current_step, warmup_iter=self.config["train"]["warmup_iter"]
@@ -127,7 +125,6 @@ class COWCGANFrcnnTrainer:
 
                 #### log
                 if current_step % self.config["logger"]["print_freq"] == 0:
-                    logger.info(f"Start logging at step {current_step}")
                     logs = self.model.get_current_log()
                     message = "<epoch:{:3d}, iter:{:8,d}, lr:{:.3e}> ".format(
                         epoch, current_step, self.model.get_current_learning_rate()
