@@ -361,11 +361,9 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
         logger.info(
             "Network G structure: {}, with parameters: {:,d}".format(net_struc_str, n)
         )
-        print("Right before the other print")
         logger.info(f"Right before the other print")
-        logger.info(s)
+        # logger.info(s)
         logger.info(f"Reached A")
-        print("Reached A")
 
         # Discriminator
         logger.info("Reached B")
@@ -387,7 +385,7 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
         logger.info(
             "Network D structure: {}, with parameters: {:,d}".format(net_struc_str, n)
         )
-        logger.info(s)
+        # logger.info(s)
         logger.info("Reached E")
 
         if self.cri_fea:  # F, Perceptual Network
@@ -406,7 +404,7 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
                     net_struc_str, n
                 )
             )
-            logger.info(s)
+            # logger.info(s)
 
         # FRCNN_model
         # Discriminator
@@ -426,7 +424,8 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
                 net_struc_str, n
             )
         )
-        logger.info(s)
+        # logger.info(s)
+        logger.info("Finished with printing the structure")
 
     def load(self):
         logger.info(f"Entered load")
