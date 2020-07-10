@@ -26,7 +26,7 @@
         "args":{
             "data_dir_GT": "/Users/vedaad/caliber/EESRGAN/data/DetectionPatches_256x256/Potsdam_ISPRS/HR/x4/",
             "data_dir_LQ": "/Users/vedaad/caliber/EESRGAN/data/DetectionPatches_256x256/Potsdam_ISPRS/LR/x4/",
-            "batch_size": 1,
+            "batch_size": 5,
             "shuffle": true,
             "validation_split": 0.0,
             "num_workers": 2
