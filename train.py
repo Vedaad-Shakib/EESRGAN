@@ -51,7 +51,7 @@ def main(config, logger):
 
 
 if __name__ == "__main__":
-    N_EPOCHS = 10
+    N_EPOCHS = 3
 
     curr_dir = os.path.dirname(os.path.realpath(__file__))
     config_path = os.path.join(curr_dir, "config_GAN.json")
