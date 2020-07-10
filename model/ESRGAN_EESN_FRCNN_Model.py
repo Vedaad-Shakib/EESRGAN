@@ -361,11 +361,15 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
         logger.info(
             "Network G structure: {}, with parameters: {:,d}".format(net_struc_str, n)
         )
+        print("Right before the other print")
+        logger.info(f"Right before the other print")
         logger.info(s)
         logger.info(f"Reached A")
+        print("Reached A")
 
         # Discriminator
         logger.info("Reached B")
+        print("Reached B")
         s, n = self.get_network_description(self.netD)
         logger.info("Reached C")
         if isinstance(self.netD, nn.DataParallel) or isinstance(
