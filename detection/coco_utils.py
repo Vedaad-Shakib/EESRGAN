@@ -163,7 +163,6 @@ def convert_to_coco_api(ds):
         bboxes = bboxes.tolist()
         labels = targets["labels"].tolist()
         areas = targets["area"].tolist()
-        print(f"areas: {areas}")
         iscrowd = targets["iscrowd"].tolist()
         if "masks" in targets:
             masks = targets["masks"]
@@ -247,7 +246,6 @@ def convert_to_coco_api_base(ds):
 
 
 def get_coco_api_from_dataset(dataset):
-    print(dataset)
     for i in range(10):
         if isinstance(dataset, torchvision.datasets.CocoDetection):
             break

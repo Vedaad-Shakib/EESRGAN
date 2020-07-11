@@ -16,7 +16,6 @@ def main(config):
         1,
         training=False,
     )
-    print(len(data_loader))
     tester = COWCGANFrcnnTrainer(config=config, data_loader=data_loader)
     tester.test()
 

@@ -132,12 +132,10 @@ def calculate_mean_std(data_loader):
         mean += imgs.mean(2).sum(0)
         std += imgs.std(2).sum(0)
         nb_samples += batch_samples
-    print(nb_samples)
     mean /= nb_samples
     std /= nb_samples
     mean /= 255
     std /= 255
-    print(mean, std)
     return mean, std
 
 
@@ -362,7 +360,6 @@ def mkdirs(paths):
 def mkdir_and_rename(path):
     if os.path.exists(path):
         new_name = path + "_archived_" + get_timestamp()
-        print("Path already exists. Rename it to [{:s}]".format(new_name))
         logger = logging.getLogger("base")
         logger.info("Path already exists. Rename it to [{:s}]".format(new_name))
         os.rename(path, new_name)

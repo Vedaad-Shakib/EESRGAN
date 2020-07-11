@@ -13,6 +13,9 @@ from .coco_eval import CocoEvaluator
 from .utils import MetricLogger, SmoothedValue, warmup_lr_scheduler, reduce_dict
 from utils import tensor2img
 
+import logging
+
+logger = logging.getLogger("base")
 
 def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
     model.train()
@@ -42,8 +45,8 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
         loss_value = losses_reduced.item()
 
         if not math.isfinite(loss_value):
-            print("Loss is {}, stopping training".format(loss_value))
-            print(loss_dict_reduced)
+            logger.info("Loss is {}, stopping training".format(loss_value))
+            logger.info(loss_dict_reduced)
             sys.exit(1)
 
         optimizer.zero_grad()
@@ -79,8 +82,6 @@ def draw_detection_boxes(new_class_conf_box, config, file_name, image):
         config["path"]["output_images"], file_name + ".jpg"
     )
     dest_image_path = os.path.join(config["path"]["Test_Result_SR"], file_name + ".jpg")
-    print(f"source image path: {source_image_path}")
-    print(f"dest image path: {dest_image_path}")
     image = cv2.imread(source_image_path, 1)
     # print(new_class_conf_box)
     # print(len(new_class_conf_box))
@@ -99,7 +100,6 @@ def draw_detection_boxes(new_class_conf_box, config, file_name, image):
             cv2.LINE_AA,
         )
 
-    print(dest_image_path)
     cv2.imwrite(dest_image_path, image)
 
 
@@ -118,7 +118,7 @@ def get_prediction(outputs, file_path, config, file_name, image, threshold=0.5):
         for i in list(outputs[0]["boxes"].detach().cpu().numpy())
     ]  # Bounding boxes
     pred_score = list(outputs[0]["scores"].detach().cpu().numpy())
-    print(pred_score)
+    logger.info(f"pred_score: {pred_score}")
     for i in range(len(text_boxes)):
         new_class_conf_box.append(
             [
@@ -132,7 +132,6 @@ def get_prediction(outputs, file_path, config, file_name, image, threshold=0.5):
         )
     draw_detection_boxes(new_class_conf_box, config, file_name, image)
     new_class_conf_box1 = np.matrix(new_class_conf_box)
-    # print(new_class_conf_box)
     if (len(new_class_conf_box)) > 0:
         np.savetxt(file_path, new_class_conf_box1, fmt="%i %1.3f %i %i %i %i")
 
@@ -141,7 +140,7 @@ def get_prediction(outputs, file_path, config, file_name, image, threshold=0.5):
 def evaluate_save(model_G, model_FRCNN, data_loader, device, config, inference=False):
     if inference: assert len(data_loader) == 1
     i = 0
-    print("Detection started........")
+    logger.info(f"Detection started........")
     for image, targets in data_loader:
         image["image_lq"] = image["image_lq"].to(device)
 
@@ -155,11 +154,10 @@ def evaluate_save(model_G, model_FRCNN, data_loader, device, config, inference=F
         file_name = os.path.splitext(os.path.basename(image["LQ_path"][0]))[0]
         file_path = os.path.join(config["path"]["Test_Result_SR"], file_name + ".txt")
         i = i + 1
-        print(i)
         img = img[0].detach()[0].float().cpu()
         img = tensor2img(img)
         get_prediction(outputs, file_path, config, file_name, img)
-    print("successfully generated the results!")
+    logger.info("successfully generated the results!")
 
 
 """
@@ -208,7 +206,7 @@ def evaluate(model_G, model_FRCNN, data_loader, device):
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
-    print("Averaged stats:", metric_logger)
+    logger.info(f"Averaged stats: {metric_logger}")
     coco_evaluator.synchronize_between_processes()
 
     # accumulate predictions from all images
@@ -256,7 +254,7 @@ def evaluate_base(model, data_loader, device):
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
-    print("Averaged stats:", metric_logger)
+    logger.info(f"Averaged stats: {metric_logger}")
     coco_evaluator.synchronize_between_processes()
 
     # accumulate predictions from all images

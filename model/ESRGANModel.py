@@ -141,7 +141,6 @@ class ESRGANModel(BaseModel):
                 )
         else:
             raise NotImplementedError("MultiStepLR learning rate scheme is enough.")
-        print(self.configS["args"]["restarts"])
         self.log_dict = OrderedDict()
 
         self.print_network()  # print network

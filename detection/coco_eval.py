@@ -1,19 +1,18 @@
-import json
-import tempfile
-
-import numpy as np
 import copy
-import time
-import torch
-import torch._six
-
-from pycocotools.cocoeval import COCOeval
-from pycocotools.coco import COCO
-import pycocotools.mask as mask_util
-
+import json
+import logging
 from collections import defaultdict
 
+import numpy as np
+import pycocotools.mask as mask_util
+import torch
+import torch._six
+from pycocotools.coco import COCO
+from pycocotools.cocoeval import COCOeval
+
 from .utils import all_gather
+
+logger = logging.getLogger("base")
 
 
 class CocoEvaluator(object):
@@ -58,7 +57,7 @@ class CocoEvaluator(object):
 
     def summarize(self):
         for iou_type, coco_eval in self.coco_eval.items():
-            print("IoU metric: {}".format(iou_type))
+            logger.info("IoU metric: {}".format(iou_type))
             coco_eval.summarize()
 
     def prepare(self, predictions, iou_type):
