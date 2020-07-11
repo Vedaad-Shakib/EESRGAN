@@ -4,7 +4,7 @@
     "model": "srgan",
     "distortion": "sr",
     "scale": 4,
-    "use_tb_logger": false,
+    "use_tb_logger": true,
 
     "network_G": {
         "which_model_G": "RRDBNet",
@@ -83,7 +83,7 @@
         "monitor": "min val_loss",
         "early_stop": 10,
 
-        "tensorboard": false
+        "tensorboard": true
     },
     "path": {
         "models": "saved/pretrained_models_EESRGAN_FRCNN",
