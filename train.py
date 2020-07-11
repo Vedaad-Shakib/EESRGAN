@@ -69,7 +69,7 @@ if __name__ == "__main__":
     batch_size = config["data_loader"]["args"]["batch_size"]
     n_iters = math.ceil(n_training_images / batch_size * N_EPOCHS)
     # config["train"]["niter"] = n_iters
-    config["train"]["niter"] = 10
+    config["train"]["niter"] = 40
 
     # set model save location
     config["path"]["models"] = os.environ["SM_MODEL_DIR"]
