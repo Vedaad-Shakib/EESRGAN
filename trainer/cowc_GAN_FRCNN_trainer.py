@@ -96,7 +96,12 @@ class COWCGANFrcnnTrainer:
                     )
                 )
                 from tensorboardX import SummaryWriter
-            tb_logger = SummaryWriter(log_dir="saved/tb_logger/" + self.config["name"])
+            if os.path.exists("/opt/ml/output/"):
+                logger.info("Creating tb_logger; output directory: /opt/ml/output/tensorboard/")
+                tb_logger = SummaryWriter('/opt/ml/output/tensorboard/')
+            else:
+                logger.info(f"Creating tb_logger; output directory: saved/tb_logger/{self.config['name']}")
+                tb_logger = SummaryWriter(log_dir="saved/tb_logger/" + self.config["name"])
         ## Todo : resume capability
         current_step = 0
         start_epoch = 0
