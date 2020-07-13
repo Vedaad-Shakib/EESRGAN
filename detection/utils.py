@@ -1,15 +1,17 @@
 from __future__ import print_function
 
-from collections import defaultdict, deque
 import datetime
+import errno
+import logging
+import os
 import pickle
 import time
+from collections import defaultdict, deque
 
 import torch
 import torch.distributed as dist
 
-import errno
-import os
+logger = logging.getLogger("base")
 
 
 class SmoothedValue(object):
@@ -209,7 +211,7 @@ class MetricLogger(object):
             if i % print_freq == 0 or i == len(iterable) - 1:
                 eta_seconds = iter_time.global_avg * (len(iterable) - i)
                 eta_string = str(datetime.timedelta(seconds=int(eta_seconds)))
-                print(
+                logger.info(
                     log_msg.format(
                         i,
                         len(iterable),
@@ -224,7 +226,7 @@ class MetricLogger(object):
             end = time.time()
         total_time = time.time() - start_time
         total_time_str = str(datetime.timedelta(seconds=int(total_time)))
-        print(
+        logger.info(
             "{} Total time: {} ({:.4f} s / it)".format(
                 header, total_time_str, total_time / len(iterable)
             )

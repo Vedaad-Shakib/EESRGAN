@@ -12,7 +12,7 @@ from parse_config import ConfigParser
 from trainer import COWCGANFrcnnTrainer
 from utils.util import read_json
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("base")
 
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(curr_dir, "config_GAN.json")
