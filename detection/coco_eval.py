@@ -1,19 +1,34 @@
 import copy
 import json
 import logging
+import sys
 from collections import defaultdict
 
 import numpy as np
+import pycocotools.cocoeval
 import pycocotools.mask as mask_util
 import torch
 import torch._six
 from pycocotools.coco import COCO
-from pycocotools.cocoeval import COCOeval
 
 from .utils import all_gather
 
 logger = logging.getLogger("base")
 
+
+class LoggerWriter:
+    def __init__(self, logger):
+        self.logger = logger
+    def write(self, text):
+        self.logger.error(text)
+    def flush(self):
+        pass
+
+# redirect cocoeval print to logger (print does not show up in sagemaker)
+sys.stdout = LoggerWriter(logger)
+pycocotools.cocoeval.__builtins__["print"] = print
+
+# redirect stdout to logger
 
 class CocoEvaluator(object):
     def __init__(self, coco_gt, iou_types):
@@ -24,7 +39,7 @@ class CocoEvaluator(object):
         self.iou_types = iou_types
         self.coco_eval = {}
         for iou_type in iou_types:
-            self.coco_eval[iou_type] = COCOeval(coco_gt, iouType=iou_type)
+            self.coco_eval[iou_type] = pycocotools.cocoeval.COCOeval(coco_gt, iouType=iou_type)
 
         self.img_ids = []
         self.eval_imgs = {k: [] for k in iou_types}
