@@ -305,7 +305,7 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
         self.log_dict["D_fake"] = torch.mean(pred_d_fake.detach())
         self.log_dict["FRCNN_loss"] = loss_value
 
-    def test(self, valid_data_loader, train=True, testResult=False, inference=False):
+    def test(self, valid_data_loader, train=True, testResult=False, inference=False, tb_logger=None, current_step=0):
         self.netG.eval()
         self.netFRCNN.eval()
         self.targets = valid_data_loader
@@ -319,7 +319,7 @@ class ESRGAN_EESN_FRCNN_Model(BaseModel):
                 ) = self.netG(self.var_L)
                 self.x_lap_HR = kornia.laplacian(self.var_H, 3)
         if train == True: # this trains it
-            evaluate(self.netG, self.netFRCNN, self.targets, self.device)
+            evaluate(self.netG, self.netFRCNN, self.targets, self.device, tb_logger=tb_logger, current_step=current_step)
         if testResult == True: # outputs train results
             evaluate(self.netG, self.netFRCNN, self.targets, self.device)
             output = evaluate_save(

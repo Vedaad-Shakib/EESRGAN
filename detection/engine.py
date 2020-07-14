@@ -167,7 +167,7 @@ the FRCNN with generated SR images
 
 
 @torch.no_grad()
-def evaluate(model_G, model_FRCNN, data_loader, device):
+def evaluate(model_G, model_FRCNN, data_loader, device, tb_logger=None, current_step=0):
     n_threads = torch.get_num_threads()
     # FIXME remove this and make paste_masks_in_image run on the GPU
     torch.set_num_threads(1)
@@ -211,7 +211,7 @@ def evaluate(model_G, model_FRCNN, data_loader, device):
 
     # accumulate predictions from all images
     coco_evaluator.accumulate()
-    coco_evaluator.summarize()
+    coco_evaluator.summarize(tb_logger=tb_logger, current_step=current_step)
     torch.set_num_threads(n_threads)
     return coco_evaluator
 

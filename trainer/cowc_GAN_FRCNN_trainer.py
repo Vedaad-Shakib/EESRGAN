@@ -148,7 +148,7 @@ class COWCGANFrcnnTrainer:
                 # validation
                 if current_step % self.config["train"]["val_freq"] == 0:
                     logger.info(f"Running validation at step {current_step}")
-                    self.model.test(self.valid_data_loader)
+                    self.model.test(self.valid_data_loader, tb_logger=tb_logger, current_step=current_step)
 
                 # #### save models and training states
                 # if current_step % self.config["logger"]["save_checkpoint_freq"] == 0:

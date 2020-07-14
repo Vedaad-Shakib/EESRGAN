@@ -13,14 +13,14 @@ from pycocotools.coco import COCO
 
 from .utils import all_gather
 
-logger = logging.getLogger("base")
+logger = logging.getLogger("val")
 
 
 class LoggerWriter:
     def __init__(self, logger):
         self.logger = logger
     def write(self, text):
-        self.logger.error(text)
+        self.logger.info(text)
     def flush(self):
         pass
 
@@ -70,10 +70,16 @@ class CocoEvaluator(object):
         for coco_eval in self.coco_eval.values():
             coco_eval.accumulate()
 
-    def summarize(self):
+    def summarize(self, tb_logger=None, current_step=0):
         for iou_type, coco_eval in self.coco_eval.items():
             logger.info("IoU metric: {}".format(iou_type))
             coco_eval.summarize()
+            stats = coco_eval.stats
+            if tb_logger and current_step:
+                tb_logger.add_scalar("Validation Average Precision (IoU=0.50:0.95)", stats[0], current_step)
+                tb_logger.add_scalar("Validation Average Precision (IoU=0.50)", stats[1], current_step)
+                tb_logger.add_scalar("Validation Average Precision (IoU=0.75)", stats[2], current_step)
+
 
     def prepare(self, predictions, iou_type):
         if iou_type == "bbox":
