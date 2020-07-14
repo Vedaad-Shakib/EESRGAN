@@ -68,8 +68,8 @@ if __name__ == "__main__":
     n_training_images = len(glob.glob(os.path.join(train_gt_dir, "*.jpg")))
     batch_size = config["data_loader"]["args"]["batch_size"]
     n_iters = math.ceil(n_training_images / batch_size * N_EPOCHS)
-    # config["train"]["niter"] = n_iters
-    config["train"]["niter"] = 40
+    config["train"]["niter"] = n_iters
+    # config["train"]["niter"] = 40
 
     # set model save location
     config["path"]["models"] = os.environ["SM_MODEL_DIR"]
